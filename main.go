@@ -1,9 +1,10 @@
 package main
 
 import (
-	// "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"go-friends/db"
+	"go-friends/routes"
 	"log"
 )
 
@@ -23,5 +24,16 @@ func main() {
 	// Run automatic migrations
 	db.AutoMigrate()
 
-	// TODO: Create gin routers
+	// Create router
+	engine := gin.Default()
+
+	// Register sub-routes
+
+	v1 := engine.Group("/v1")
+	{
+		routes.RegisterUserRoutes(v1)
+	}
+
+	// Start listening
+	log.Fatal(engine.Run())
 }
