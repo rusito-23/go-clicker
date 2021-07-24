@@ -20,5 +20,8 @@ func main() {
 	// Close database on exit
 	defer db.Close()
 
+	// Run automatic migrations
+	db.AutoMigrate()
+
 	// TODO: Create gin routers
 }
