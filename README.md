@@ -1,5 +1,7 @@
 # go-friends
 
+![Lint Status](https://github.com/rusito-23/go-friends/actions/workflows/golangci-lint.yml/badge.svg)
+
 Fake social network back-end built in Go
 
 ## Dev Setup
