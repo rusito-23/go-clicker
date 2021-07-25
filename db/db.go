@@ -5,16 +5,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// DB - Wrapper around the database connection
-type DB struct {
-	conn *gorm.DB
-}
-
-// Initialize - Creates the database connection
-func Initialize() (DB, error) {
+// Initialize -
+// Creates the database connection
+func Initialize() (*gorm.DB, error) {
 
 	// Initialize
-	db := DB{}
+	var db *gorm.DB
 	cfg := CFG{}
 
 	// Parse the database configuration
@@ -24,16 +20,10 @@ func Initialize() (DB, error) {
 	}
 
 	// Open the `gorm` connection
-	conn, err := gorm.Open(cfg.Kind, cfg.Formatted())
+	db, err = gorm.Open(cfg.Kind, cfg.Formatted())
 	if err != nil {
 		return db, err
 	}
 
-	db.conn = conn
 	return db, nil
-}
-
-// Close - Finalize the database connection
-func (db DB) Close() {
-	db.conn.Close()
 }

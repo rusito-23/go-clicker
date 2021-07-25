@@ -29,3 +29,6 @@
 
 # Ignore `fresh` temporary folder
 tmp/
+
+# Ignore compiled executable
+go-friends

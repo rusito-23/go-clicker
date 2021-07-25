@@ -4,7 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"go-friends/db"
-	"go-friends/routes"
+	"go-friends/modules/common"
+	"go-friends/modules/users"
 	"log"
 )
 
@@ -22,16 +23,19 @@ func main() {
 	defer db.Close()
 
 	// Run automatic migrations
-	db.AutoMigrate()
+	users.AutoMigrate(db)
 
 	// Create router
 	engine := gin.Default()
 
-	// Register sub-routes
+	// Set up middlewares
+	engine.Use(common.MiddlewareDB(db))
 
+	// Create `v1` group &&
+	// Register sub-routes
 	v1 := engine.Group("/v1")
 	{
-		routes.RegisterUserRoutes(v1)
+		users.RegisterRoutes(v1)
 	}
 
 	// Start listening

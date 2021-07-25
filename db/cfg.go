@@ -4,7 +4,8 @@ import (
 	"fmt"
 )
 
-// CFG - contains the DB environment specs
+// CFG -
+// Contains the DB environment specs
 type CFG struct {
 	Username string `env:"POSTGRES_USER"`
 	Password string `env:"POSTGRES_PASSWORD"`
@@ -15,7 +16,8 @@ type CFG struct {
 	SSLMode  string `env:"POSTGRES_SSL_MODE" envDefault:"disable"`
 }
 
-// Formatted - Parses the database configuration into `gorm` standards
+// Formatted CFG -
+// Parses the database configuration into `gorm` standards
 func (cfg CFG) Formatted() string {
 	return fmt.Sprintf(
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
