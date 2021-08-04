@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"go-friends/db"
-	"go-friends/modules/common"
-	"go-friends/modules/users"
+	"go-clicker/db"
+	"go-clicker/modules/common"
+	"go-clicker/modules/users"
 	"log"
 )
 

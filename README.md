@@ -1,7 +1,7 @@
-# go-friends
+# go-clicker
 
-![Lint Status](https://github.com/rusito-23/go-friends/actions/workflows/golangci-lint.yml/badge.svg) 
-![Build Status](https://github.com/rusito-23/go-friends/actions/workflows/build.yml/badge.svg)
+![Lint Status](https://github.com/rusito-23/go-clicker/actions/workflows/golangci-lint.yml/badge.svg) 
+![Build Status](https://github.com/rusito-23/go-clicker/actions/workflows/build.yml/badge.svg)
 
 Fake social network back-end built in Go
 

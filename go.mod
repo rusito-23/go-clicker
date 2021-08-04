@@ -1,4 +1,4 @@
-module go-friends
+module go-clicker
 
 go 1.16
 

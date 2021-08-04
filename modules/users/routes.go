@@ -3,7 +3,7 @@ package users
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"go-friends/modules/common"
+	"go-clicker/modules/common"
 	"net/http"
 )
 

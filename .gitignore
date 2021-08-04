@@ -31,4 +31,4 @@
 tmp/
 
 # Ignore compiled executable
-go-friends
+go-clicker

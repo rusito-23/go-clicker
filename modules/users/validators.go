@@ -2,7 +2,7 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-friends/modules/common"
+	"go-clicker/modules/common"
 )
 
 // UserModelValidator -

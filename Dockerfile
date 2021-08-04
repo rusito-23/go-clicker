@@ -13,5 +13,5 @@ EXPOSE 8080
 
 # Entry point specification
 ENTRYPOINT CompileDaemon \
---build="go build -o /go-friends" \
---command=/go-friends
+--build="go build -o /go-clicker" \
+--command=/go-clicker
