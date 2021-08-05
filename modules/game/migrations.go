@@ -1,11 +1,11 @@
-package users
+package game
 
 import (
 	"github.com/jinzhu/gorm"
 )
 
 // AutoMigrate -
-// Migration logic for the user model
+// Migration logic for the game model
 func AutoMigrate(db *gorm.DB) {
-	db.AutoMigrate(&UserModel{})
+	db.AutoMigrate(&Model{})
 }

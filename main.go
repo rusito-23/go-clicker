@@ -5,7 +5,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"go-clicker/db"
 	"go-clicker/modules/common"
-	"go-clicker/modules/users"
+	"go-clicker/modules/game"
 	"log"
 )
 
@@ -23,7 +23,7 @@ func main() {
 	defer db.Close()
 
 	// Run automatic migrations
-	users.AutoMigrate(db)
+	game.AutoMigrate(db)
 
 	// Create router
 	engine := gin.Default()
@@ -35,7 +35,7 @@ func main() {
 	// Register sub-routes
 	v1 := engine.Group("/v1")
 	{
-		users.RegisterRoutes(v1)
+		game.RegisterRoutes(v1)
 	}
 
 	// Start listening
