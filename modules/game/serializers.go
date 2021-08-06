@@ -8,7 +8,7 @@ import (
 // Response -
 // The game structure to be sent in the response when required
 type Response struct {
-	ID         uint   `json:"id"`
+	ExternalID string `json:"external_id"`
 	CreatedAt  string `json:"created_at"`
 	UpdatedAt  string `json:"updated_at"`
 	ClickScore Score  `json:"click_score"`
@@ -26,7 +26,7 @@ type Serializer struct {
 // The function that builds the response
 func (s *Serializer) Response() Response {
 	return Response{
-		ID:         s.ID,
+		ExternalID: s.ExternalID,
 		CreatedAt:  s.CreatedAt.UTC().Format(time.RFC3339),
 		UpdatedAt:  s.UpdatedAt.UTC().Format(time.RFC3339),
 		ClickScore: s.ClickScore,

@@ -9,6 +9,9 @@ import (
 type Model struct {
 	gorm.Model
 
+	// The external unique identifier
+	ExternalID string `gorm:"unique_index"`
+
 	// The amount of clicks made by the player
 	// Starts with 0
 	ClickScore Score
@@ -33,3 +36,9 @@ const (
 	// Finished - The game finished successfully
 	Finished = "finished"
 )
+
+// TableName -
+// Specifies the table name for the Game Model
+func (Model) TableName() string {
+	return "games"
+}
