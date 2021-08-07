@@ -1,3 +1,4 @@
 FailedToCreateGame = "Failed to create game"
 FailedToUpdateGame = "Failed to update game"
 GameNotFound = "Game not found"
+InvalidGameState = "Invalid game state"

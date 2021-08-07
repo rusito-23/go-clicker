@@ -26,3 +26,8 @@ func (builder ErrorBuilder) FailedToUpdateGame() gin.H {
 func (builder ErrorBuilder) GameNotFound() gin.H {
 	return gin.H{"message": common.Localize("GameNotFound", builder.loc)}
 }
+
+// InvalidGameState -
+func (builder ErrorBuilder) InvalidGameState() gin.H {
+	return gin.H{"message": common.Localize("InvalidGameState", builder.loc)}
+}

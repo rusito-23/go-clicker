@@ -83,9 +83,16 @@ func click(c *gin.Context) {
 		return
 	}
 
-	// Increment game score & start progress
+	// Validate and update the game state if needed
+	if game.Status == Finished {
+		c.JSON(http.StatusPreconditionFailed, errBuilder.InvalidGameState())
+		return
+	} else if game.Status == Created {
+		game.Status = Started
+	}
+
+	// Increment game score
 	game.ClickScore++
-	game.Status = Started
 
 	// Update the game in the DB
 	err = SaveGame(db, &game)
