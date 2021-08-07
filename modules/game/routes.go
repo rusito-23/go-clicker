@@ -9,10 +9,15 @@ import (
 )
 
 // RegisterRoutes -
-// Links all of the handlers in the `/game` path
+// Registers all of the handlers for the `/game` path
 func RegisterRoutes(group *gin.RouterGroup) {
-	userRoutes := group.Group("/game")
+	userRoutes := group.Group(
+		"/game",
+		// Define the possible middlewares for the `game` path
+		ErrorBuilderMiddleware(),
+	)
 	{
+		// Define the possible routes for the `game` path
 		userRoutes.GET("/ping", ping)
 		userRoutes.POST("/", create)
 		userRoutes.GET("/:external_id", retrieve)
@@ -28,6 +33,7 @@ func ping(c *gin.Context) {
 // Handle post request
 func create(c *gin.Context) {
 	db := c.MustGet(common.KContextDB).(*gorm.DB)
+	errBuilder := c.MustGet(common.KContextErrorBuilder).(ErrorBuilder)
 
 	// Create game with default values
 	game := Model{
@@ -39,7 +45,7 @@ func create(c *gin.Context) {
 	// Insert game into the DB
 	err := InsertGame(db, &game)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to save game"})
+		c.JSON(http.StatusInternalServerError, errBuilder.FailedToCreateGame())
 		return
 	}
 
@@ -51,11 +57,12 @@ func create(c *gin.Context) {
 // Handle retrieve request
 func retrieve(c *gin.Context) {
 	db := c.MustGet(common.KContextDB).(*gorm.DB)
+	errBuilder := c.MustGet(common.KContextErrorBuilder).(ErrorBuilder)
 
 	// Retrieve game or send error
 	game, err := FindGameByExternalID(db, c.Param("external_id"))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Game Not Found"})
+		c.JSON(http.StatusNotFound, errBuilder.GameNotFound())
 		return
 	}
 
@@ -67,11 +74,12 @@ func retrieve(c *gin.Context) {
 // Handle click request
 func click(c *gin.Context) {
 	db := c.MustGet(common.KContextDB).(*gorm.DB)
+	errBuilder := c.MustGet(common.KContextErrorBuilder).(ErrorBuilder)
 
 	// Retrieve game or send error
 	game, err := FindGameByExternalID(db, c.Param("external_id"))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Game Not Found"})
+		c.JSON(http.StatusNotFound, errBuilder.GameNotFound())
 		return
 	}
 
@@ -82,7 +90,7 @@ func click(c *gin.Context) {
 	// Update the game in the DB
 	err = SaveGame(db, &game)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to save game"})
+		c.JSON(http.StatusInternalServerError, errBuilder.FailedToUpdateGame())
 		return
 	}
 

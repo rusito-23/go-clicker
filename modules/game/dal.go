@@ -7,8 +7,8 @@ import (
 // FindGameByExternalID -
 // Search for a particular game
 func FindGameByExternalID(db *gorm.DB, ExternalID string) (Model, error) {
-	game := Model{ExternalID: ExternalID}
-	err := db.First(&game).Error
+	var game Model
+	err := db.Where(Model{ExternalID: ExternalID}).First(&game).Error
 	return game, err
 }
 

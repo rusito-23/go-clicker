@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"go-clicker/db"
 	"go-clicker/modules/common"
 	"go-clicker/modules/game"
 	"log"
@@ -12,7 +11,7 @@ import (
 func main() {
 
 	// Get database credentials and specs
-	var db, err = db.Initialize()
+	var db, err = common.InitializeDB()
 
 	if err != nil {
 		log.Fatalf("Could not initialize database: %v", err)
@@ -25,11 +24,15 @@ func main() {
 	// Run automatic migrations
 	game.AutoMigrate(db)
 
+	// Create localization bundle
+	locBundle := common.CreateLocalizationBundle()
+
 	// Create router
 	engine := gin.Default()
 
 	// Set up middlewares
-	engine.Use(common.MiddlewareDB(db))
+	engine.Use(common.DBMiddleware(db))
+	engine.Use(common.LocMiddleware(locBundle))
 
 	// Create `v1` group &&
 	// Register sub-routes

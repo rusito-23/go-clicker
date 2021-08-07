@@ -1,12 +1,37 @@
-package db
+package common
 
 import (
 	"fmt"
+	"github.com/caarlos0/env/v6"
+	"github.com/jinzhu/gorm"
 )
 
-// CFG -
+// InitializeDB -
+// Creates the database connection
+func InitializeDB() (*gorm.DB, error) {
+
+	// Initialize
+	var db *gorm.DB
+	cfg := DBConfig{}
+
+	// Parse the database configuration
+	err := env.Parse(&cfg)
+	if err != nil {
+		return db, err
+	}
+
+	// Open the `gorm` connection
+	db, err = gorm.Open(cfg.Kind, cfg.Formatted())
+	if err != nil {
+		return db, err
+	}
+
+	return db, nil
+}
+
+// DBConfig -
 // Contains the DB environment specs
-type CFG struct {
+type DBConfig struct {
 	Username string `env:"POSTGRES_USER"`
 	Password string `env:"POSTGRES_PASSWORD"`
 	Database string `env:"POSTGRES_DB"`
@@ -16,9 +41,9 @@ type CFG struct {
 	SSLMode  string `env:"POSTGRES_SSL_MODE" envDefault:"disable"`
 }
 
-// Formatted CFG -
+// Formatted DBConfig -
 // Parses the database configuration into `gorm` standards
-func (cfg CFG) Formatted() string {
+func (cfg DBConfig) Formatted() string {
 	return fmt.Sprintf(
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		cfg.Host,
