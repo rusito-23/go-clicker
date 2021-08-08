@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"go-clicker/modules/common"
-	"go-clicker/modules/game"
+	"go-clicker/app/common"
+	"go-clicker/app/game"
 	"log"
 )
 

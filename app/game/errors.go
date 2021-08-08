@@ -3,7 +3,7 @@ package game
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
-	"go-clicker/modules/common"
+	"go-clicker/app/common"
 )
 
 // ErrorBuilder -

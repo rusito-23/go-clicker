@@ -2,7 +2,7 @@ package game
 
 //import (
 //	"github.com/gin-gonic/gin"
-//	"go-clicker/modules/common"
+//	"go-clicker/app/common"
 //)
 //
 //// UserModelValidator -
