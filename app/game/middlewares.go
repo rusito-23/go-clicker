@@ -10,6 +10,6 @@ import (
 func ErrorBuilderMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		loc := c.MustGet(common.KContextLoc).(*i18n.Localizer)
-		c.Set(common.KContextErrorBuilder, ErrorBuilder{loc: loc})
+		c.Set(common.KContextErrorBuilder, ErrorBuilder{L: loc})
 	}
 }

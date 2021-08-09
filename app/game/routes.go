@@ -19,9 +19,9 @@ func RegisterRoutes(group *gin.RouterGroup) {
 	{
 		// Define the possible routes for the `game` path
 		userRoutes.GET("/ping", ping)
-		userRoutes.POST("/", create)
-		userRoutes.GET("/:external_id", retrieve)
-		userRoutes.PUT("/:external_id/click", click)
+		userRoutes.POST("/", Create)
+		userRoutes.GET("/:external_id", Retrieve)
+		userRoutes.PUT("/:external_id/click", Click)
 	}
 }
 
@@ -30,8 +30,8 @@ func ping(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "pong"})
 }
 
-// Handle post request
-func create(c *gin.Context) {
+// Create - Handle post request
+func Create(c *gin.Context) {
 	db := c.MustGet(common.KContextDB).(*gorm.DB)
 	errBuilder := c.MustGet(common.KContextErrorBuilder).(ErrorBuilder)
 
@@ -54,8 +54,8 @@ func create(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"game": serializer.Response()})
 }
 
-// Handle retrieve request
-func retrieve(c *gin.Context) {
+// Retrieve - Handle retrieve request
+func Retrieve(c *gin.Context) {
 	db := c.MustGet(common.KContextDB).(*gorm.DB)
 	errBuilder := c.MustGet(common.KContextErrorBuilder).(ErrorBuilder)
 
@@ -71,8 +71,8 @@ func retrieve(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"game": serializer.Response()})
 }
 
-// Handle click request
-func click(c *gin.Context) {
+// Click - Handle click request
+func Click(c *gin.Context) {
 	db := c.MustGet(common.KContextDB).(*gorm.DB)
 	errBuilder := c.MustGet(common.KContextErrorBuilder).(ErrorBuilder)
 
