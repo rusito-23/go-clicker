@@ -31,3 +31,13 @@ func (builder ErrorBuilder) GameNotFound() gin.H {
 func (builder ErrorBuilder) InvalidGameState() gin.H {
 	return gin.H{"message": common.Localize("InvalidGameState", builder.L)}
 }
+
+// InvalidCountParameter -
+func (builder ErrorBuilder) InvalidCountParameter() gin.H {
+	return gin.H{"message": common.Localize("InvalidCountParameter", builder.L)}
+}
+
+// FailedToRetrieveGames -
+func (builder ErrorBuilder) FailedToRetrieveGames() gin.H {
+	return gin.H{"message": common.Localize("FailedToRetrieveGames", builder.L)}
+}

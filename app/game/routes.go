@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"go-clicker/app/common"
 	"net/http"
+	"strconv"
 )
 
 // RegisterRoutes -
@@ -20,7 +21,9 @@ func RegisterRoutes(group *gin.RouterGroup) {
 		// Define the possible routes for the `game` path
 		userRoutes.GET("/ping", ping)
 		userRoutes.POST("/", Create)
+		userRoutes.GET("/scoreboard", Scoreboard)
 		userRoutes.GET("/:external_id", Retrieve)
+		userRoutes.DELETE("/:external_id", Finalize)
 		userRoutes.PUT("/:external_id/click", Click)
 	}
 }
@@ -28,6 +31,37 @@ func RegisterRoutes(group *gin.RouterGroup) {
 // Handle ping
 func ping(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "pong"})
+}
+
+// Scoreboard - List last games in the scoreboard
+func Scoreboard(c *gin.Context) {
+	db := c.MustGet(common.KContextDB).(*gorm.DB)
+	errBuilder := c.MustGet(common.KContextErrorBuilder).(ErrorBuilder)
+
+	// Retrieve the count parameter, if possible
+	stringCount, exists := c.GetQuery("count")
+	if !exists {
+		// Use the default count 10
+		stringCount = "10"
+	}
+
+	// Convert count to integer if possible
+	count, err := strconv.Atoi(stringCount)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, errBuilder.InvalidCountParameter())
+		return
+	}
+
+	// Retrieve the scoreboard
+	games, err := ListGames(db, count)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errBuilder.FailedToRetrieveGames())
+		return
+	}
+
+	// Serialize the retrieved games
+	serializer := ScoreboardSerializer{c, games}
+	c.JSON(http.StatusCreated, gin.H{"games": serializer.Response()})
 }
 
 // Create - Handle post request
@@ -83,16 +117,44 @@ func Click(c *gin.Context) {
 		return
 	}
 
-	// Validate and update the game state if needed
-	if game.Status == Finished {
+	// Validate game state
+	if game.Status != Finished {
 		c.JSON(http.StatusPreconditionFailed, errBuilder.InvalidGameState())
 		return
-	} else if game.Status == Created {
-		game.Status = Started
 	}
+
+	// Update the game
+	game.Status = Started
 
 	// Increment game score
 	game.ClickScore++
+
+	// Update the game in the DB
+	err = SaveGame(db, &game)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errBuilder.FailedToUpdateGame())
+		return
+	}
+
+	// Serialize game
+	serializer := Serializer{c, game}
+	c.JSON(http.StatusOK, gin.H{"game": serializer.Response()})
+}
+
+// Finalize - Handle game finalize request
+func Finalize(c *gin.Context) {
+	db := c.MustGet(common.KContextDB).(*gorm.DB)
+	errBuilder := c.MustGet(common.KContextErrorBuilder).(ErrorBuilder)
+
+	// Retrieve game or throw error
+	game, err := FindGameByExternalID(db, c.Param("external_id"))
+	if err != nil {
+		c.JSON(http.StatusNotFound, errBuilder.GameNotFound())
+		return
+	}
+
+	// Always update the game state
+	game.Status = Finished
 
 	// Update the game in the DB
 	err = SaveGame(db, &game)
