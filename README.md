@@ -1,7 +1,6 @@
 # :mouse: go-clicker
 
-![Lint Status](https://github.com/rusito-23/go-clicker/actions/workflows/golangci-lint.yml/badge.svg)
-![Build Status](https://github.com/rusito-23/go-clicker/actions/workflows/build.yml/badge.svg)
+![CI Status](https://github.com/rusito-23/go-clicker/actions/workflows/continous_integration.yml/badge.svg)
 
 Incremental game built in Go.
 

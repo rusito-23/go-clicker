@@ -1,0 +1,50 @@
+name: Continous Integration
+# A workflow that ensures that the project won't break
+# it builds the application, runs the unit tests and lints
+
+# This workflow will run whenever there's a PR
+# or a pull to the `main` branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+
+  # Run linter rules
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.41.1
+
+  # Build the application
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup
+        uses: actions/setup-go@v2
+        with:
+          go-version: v1.16.1
+      - name: build
+        run: go build
+
+  # Run the unit tests
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup
+        uses: actions/setup-go@v2
+        with:
+          go-version: v1.16.1
+      - name: build
+        run: go test -race go-clicker/tests
